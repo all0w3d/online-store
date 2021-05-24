@@ -23,7 +23,12 @@ const NavBar = observer(() => {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <NavLink style={{ color: "white" }} to={SHOP_ROUTE}>
+        <NavLink
+          style={{ color: "white" }}
+          onClick={() => window.location.href="/"}
+          to={SHOP_ROUTE}
+          
+        >
           Интерент Магазин
         </NavLink>
         {user.isAuth ? (
