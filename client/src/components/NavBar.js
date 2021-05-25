@@ -3,7 +3,12 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE } from "../utils/consts";
+import {
+  ADMIN_ROUTE,
+  BASKET_ROUTE,
+  LOGIN_ROUTE,
+  SHOP_ROUTE,
+} from "../utils/consts";
 import { Button } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
@@ -23,43 +28,48 @@ const NavBar = observer(() => {
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
-        <NavLink
-          style={{ color: "white" }}
-          onClick={() => window.location.href="/"}
-          to={SHOP_ROUTE}
-          
-        >
+        <NavLink style={{ color: "white", cursor: "pointer" }} to={SHOP_ROUTE}>
           Интерент Магазин
         </NavLink>
-        {user.isAuth ? (
-          <Nav className="ml-auto" style={{ color: "white" }}>
-            {user.isAdmin ? (
+
+        <div>
+          {user.isAuth ? (
+            <Nav className="ml-auto" style={{ color: "white" }}>
+              {user.isAdmin ? (
+                <Button
+                  variant={"outline-light"}
+                  onClick={() => history.push(ADMIN_ROUTE)}
+                >
+                  Админ панель
+                </Button>
+              ) : null}
+
               <Button
                 variant={"outline-light"}
-                onClick={() => history.push(ADMIN_ROUTE)}
+                onClick={() => logOut()}
+                className="ml-2"
               >
-                Админ панель
+                Выйти
               </Button>
-            ) : null}
-
-            <Button
-              variant={"outline-light"}
-              onClick={() => logOut()}
-              className="ml-2"
-            >
-              Выйти
-            </Button>
-          </Nav>
-        ) : (
-          <Nav className="ml-auto" style={{ color: "white" }}>
-            <Button
-              variant={"outline-light"}
-              onClick={() => history.push(LOGIN_ROUTE)}
-            >
-              Авторизация
-            </Button>
-          </Nav>
-        )}
+              <Button
+                variant={"outline-light"}
+                onClick={() => history.push(BASKET_ROUTE)}
+                className="ml-2"
+              >
+                Корзина
+              </Button>
+            </Nav>
+          ) : (
+            <Nav className="ml-auto" style={{ color: "white" }}>
+              <Button
+                variant={"outline-light"}
+                onClick={() => history.push(LOGIN_ROUTE)}
+              >
+                Авторизация
+              </Button>
+            </Nav>
+          )}
+        </div>
       </Container>
     </Navbar>
   );

@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import bigStar from "../assets/bigStar.png";
 import { useParams } from "react-router-dom";
 import { fetchOneDevice, fetchBrands } from "../http/deviceAPI";
+import { Context } from '../index'
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
   const [brand, setBrand] = useState();
   const { id } = useParams();
+  const { basket } = useContext(Context);
+  
   useEffect(() => {
     fetchOneDevice(id).then((device) => {
       setDevice(device);
@@ -60,7 +63,13 @@ const DevicePage = () => {
             }}
           >
             <h3>Цена: {device.price} грн.</h3>
-            <Button variant={"outline-dark"}>Добавить в корзину</Button>
+            <Button variant={"outline-dark"} onClick={() => {
+
+              basket.setDevices(`${brand} ${device.name}`)
+              basket.setPrice(device.price)
+              basket.setQuantity(1)
+              
+            }}>Добавить в корзину</Button>
           </Card>
         </Col>
       </Row>
