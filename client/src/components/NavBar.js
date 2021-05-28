@@ -9,13 +9,14 @@ import {
   LOGIN_ROUTE,
   SHOP_ROUTE,
 } from "../utils/consts";
-import { Button } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import Container from "react-bootstrap/Container";
 import { useHistory } from "react-router-dom";
 import { exit } from "../http/userAPI";
+import logo from "../assets/logo.png";
 const NavBar = observer(() => {
-  const { user } = useContext(Context);
+  const { user, basket } = useContext(Context);
   const history = useHistory();
 
   const logOut = () => {
@@ -29,6 +30,10 @@ const NavBar = observer(() => {
     <Navbar bg="dark" variant="dark">
       <Container>
         <NavLink style={{ color: "white", cursor: "pointer" }} to={SHOP_ROUTE}>
+          <Image
+            src={logo}
+            style={{ height: "40px", margin: "0 15px 0 0" }}
+          ></Image>
           Интерент Магазин
         </NavLink>
 
@@ -51,12 +56,17 @@ const NavBar = observer(() => {
               >
                 Выйти
               </Button>
+
               <Button
                 variant={"outline-light"}
                 onClick={() => history.push(BASKET_ROUTE)}
                 className="ml-2"
               >
-                Корзина
+                Корзина{" "}
+                <span className="badge bg-primary">
+                  {basket.devices.length ? basket.devices.length : null}
+                </span>
+                <span className="visually-hidden"></span>
               </Button>
             </Nav>
           ) : (

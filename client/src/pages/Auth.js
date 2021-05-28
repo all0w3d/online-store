@@ -3,7 +3,7 @@ import { Container, Form } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
-import { NavLink, useLocation, useHistory } from "react-router-dom";
+import { NavLink, useLocation, useHistory, withRouter } from "react-router-dom";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
 import { check, login, registration } from "../http/userAPI";
 import { observer } from "mobx-react-lite";
@@ -31,7 +31,9 @@ const Auth = observer(() => {
       check().then((data) => {
         user.setIsAdmin(data.role === "ADMIN");
       });
+
       history.push(SHOP_ROUTE);
+      window.location.reload();
     } catch (e) {
       alert(e.response.data.message);
     }

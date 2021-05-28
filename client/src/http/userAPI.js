@@ -24,6 +24,12 @@ export const check = async () => {
 };
 
 
+export const getUserId = async () => {
+  const { data } = await $authHost.get("api/user/");
+  return data
+}
+
+
 
 export const exit = async () => {
   const { data } = await $authHost.get("api/user/auth");

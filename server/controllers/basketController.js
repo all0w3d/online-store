@@ -3,8 +3,8 @@ const ApiError = require('../error/ApiError');
 
 class BasketController {
     async create(req, res) {
-        const {name} = req.body
-        const basket = await Basket.create({name})
+        const {userId} = req.body
+        const basket = await Basket.create({userId})
         return res.json(basket)
     }
 
@@ -14,5 +14,7 @@ class BasketController {
     }
 
 }
+
+
 
 module.exports = new BasketController()

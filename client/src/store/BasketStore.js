@@ -4,7 +4,7 @@ export default class BasketStore {
   constructor() {
     this._devices = [];
     this._price = 0;
-    this._quantity = 0;
+    this._id = null;
 
     makeAutoObservable(this);
   }
@@ -17,8 +17,13 @@ export default class BasketStore {
     this._price += price;
   }
 
-  setQuantity(quantity) {
-    this._quantity += quantity;
+  clearBasket() {
+    this._devices = [];
+    this._price = 0;
+  }
+
+  setId(id) {
+    this._id = id;
   }
 
   get devices() {
@@ -29,7 +34,7 @@ export default class BasketStore {
     return this._price;
   }
 
-  get quantity() {
-    return this._quantity;
+  get id() {
+    return this._id;
   }
 }

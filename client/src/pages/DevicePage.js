@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import bigStar from "../assets/bigStar.png";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { fetchOneDevice, fetchBrands } from "../http/deviceAPI";
-import { Context } from '../index'
+import { Context } from "../index";
+import { SHOP_ROUTE } from "../utils/consts";
+import { addDeviceToBasket } from "../http/basketApi";
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
   const [brand, setBrand] = useState();
   const { id } = useParams();
-  const { basket } = useContext(Context);
-  
+  const { user, basket } = useContext(Context);
+
   useEffect(() => {
     fetchOneDevice(id).then((device) => {
       setDevice(device);
@@ -26,6 +28,12 @@ const DevicePage = () => {
 
   return (
     <Container className="mt-3">
+      <NavLink to={SHOP_ROUTE}>
+        <button type="button" className="btn btn-primary mb-3">
+          Вернуться назад
+        </button>
+      </NavLink>
+
       <Row>
         <Col md={4} style={{ display: "flex", alignItems: "center" }}>
           <Image
@@ -63,13 +71,19 @@ const DevicePage = () => {
             }}
           >
             <h3>Цена: {device.price} грн.</h3>
-            <Button variant={"outline-dark"} onClick={() => {
-
-              basket.setDevices(`${brand} ${device.name}`)
-              basket.setPrice(device.price)
-              basket.setQuantity(1)
-              
-            }}>Добавить в корзину</Button>
+            <Button
+              variant={"outline-dark"}
+              onClick={() => {
+                basket.setDevices(`${brand} ${device.name}`);
+                basket.setPrice(device.price);
+                addDeviceToBasket({
+                  basketId: basket.id,
+                  deviceId: id,
+                });
+              }}
+            >
+              Добавить в корзину
+            </Button>
           </Card>
         </Col>
       </Row>
