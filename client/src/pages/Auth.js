@@ -1,9 +1,10 @@
 import React, { useContext, useState } from "react";
-import { Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
-import { NavLink, useLocation, useHistory, withRouter } from "react-router-dom";
+import Form from "react-bootstrap/Form";
+import { NavLink, useLocation, useHistory } from "react-router-dom";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
 import { check, login, registration } from "../http/userAPI";
 import { observer } from "mobx-react-lite";
@@ -16,6 +17,7 @@ const Auth = observer(() => {
   const isLogin = location.pathname === LOGIN_ROUTE;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("false");
 
   const click = async () => {
     try {
@@ -23,9 +25,8 @@ const Auth = observer(() => {
       if (isLogin) {
         data = await login(email, password);
       } else {
-        data = await registration(email, password);
+        data = await registration(email, password, role);
       }
-
       user.setUser(user);
       user.setIsAuth(true);
       check().then((data) => {
@@ -47,6 +48,17 @@ const Auth = observer(() => {
       <Card style={{ width: 600 }} className="p-5">
         <h2 className="m-auto">{isLogin ? "Авторизация" : "Регистрация"}</h2>
         <Form className="d-flex flex-column">
+          {!isLogin ? (
+            <Form.Check
+              type="switch"
+              id="custom-switch"
+              label="Зарегистрироваться как АДМИН"
+              className="mt-3"
+              onClick={(e) => {setRole(!role)
+              }}
+              
+            />
+          ) : null}
           <Form.Control
             className="mt-3"
             placeholder="Введите ваш email..."

@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
 import bigStar from "../assets/bigStar.png";
-import { NavLink, useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import { fetchOneDevice, fetchBrands } from "../http/deviceAPI";
 import { Context } from "../index";
-import { SHOP_ROUTE } from "../utils/consts";
+import { SHOP_ROUTE, LOGIN_ROUTE } from "../utils/consts";
 import { addDeviceToBasket } from "../http/basketApi";
+import '@fortawesome/react-fontawesome'
+
+
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
@@ -58,6 +61,8 @@ const DevicePage = () => {
             >
               {device.rating}
             </div>
+
+           
           </Row>
         </Col>
         <Col md={4}>
@@ -71,19 +76,27 @@ const DevicePage = () => {
             }}
           >
             <h3>Цена: {device.price} грн.</h3>
-            <Button
-              variant={"outline-dark"}
-              onClick={() => {
-                basket.setDevices(`${brand} ${device.name}`);
-                basket.setPrice(device.price);
-                addDeviceToBasket({
-                  basketId: basket.id,
-                  deviceId: id,
-                });
-              }}
-            >
-              Добавить в корзину
-            </Button>
+
+            {user.isAuth ? (
+              <Button
+                variant={"outline-dark"}
+                onClick={() => {
+                  basket.setDevices(`${brand} ${device.name}`);
+                  basket.setPrice(device.price);
+                  addDeviceToBasket({
+                    basketId: basket.id,
+                    deviceId: id,
+                  });
+                }}
+              >
+                Добавить в корзину
+              </Button>
+            ) : (
+              <Link to={LOGIN_ROUTE}>
+                {" "}
+                <Button variant={"outline-dark"}>Добавить в корзину</Button>
+              </Link>
+            )}
           </Card>
         </Col>
       </Row>

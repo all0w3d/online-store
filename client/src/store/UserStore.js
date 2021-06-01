@@ -17,8 +17,8 @@ export default class UserStore {
     this._user = user;
   }
 
-  setIsAdmin(user) {
-    this._isAdmin = user;
+  setIsAdmin(admin) {
+    this._isAdmin = admin;
   }
 
   setUserId(id) {
