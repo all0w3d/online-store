@@ -1,0 +1,23 @@
+.edit__modal {
+    width: 100%;
+  .modal-dialog {
+    max-width: 1000px;
+    margin: 50px auto;
+    padding: 0;
+    width: 100%;
+    
+    .modal-content {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      width: 1000px;
+      width: 100%;
+      
+    }
+  }
+}
+
+.edit__modal-item {
+  max-width: 200px;
+  width: 100%;
+}

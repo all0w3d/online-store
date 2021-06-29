@@ -38,11 +38,15 @@ class DeviceController {
   async getAll(req, res) {
     let { brandId, typeId, limit, page } = req.query;
     page = page || 1;
-    limit = limit || 9;
+    limit = limit || 12;
     let offset = page * limit - limit;
     let devices;
     if (!brandId && !typeId) {
-      devices = await Device.findAndCountAll({ limit, offset });
+      devices = await Device.findAndCountAll({
+        order: [["id", "ASC"]],
+        limit,
+        offset,
+      });
     }
     if (brandId && !typeId) {
       devices = await Device.findAndCountAll({
@@ -65,6 +69,7 @@ class DeviceController {
         offset,
       });
     }
+    console.log(devices.rows);
     return res.json(devices);
   }
 
@@ -77,7 +82,23 @@ class DeviceController {
     return res.json(device);
   }
 
-  
+  async getAllDevices(req, res) {
+    const device = await Device.findAndCountAll({ order: [["id", "ASC"]] });
+    return res.json(device);
+  }
+
+  async update(req, res) {
+    const { id } = req.params;
+    const { newName, newPrice } = req.body.params;
+    const device = await Device.update(
+      { name: newName, price: newPrice },
+      {
+        where: { id: id },
+      }
+    );
+
+    return res.json(device);
+  }
 }
 
 module.exports = new DeviceController();

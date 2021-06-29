@@ -4,23 +4,28 @@ import { Context } from "../index";
 import { Row } from "react-bootstrap";
 import DeviceItem from "./DeviceItem";
 
- const DeviceList = observer(() => {
+const DeviceList = observer(() => {
   const { device } = useContext(Context);
 
- let brandsObj = {}
+  let brandsObj = {};
 
   device.brands.forEach((brand) => {
     return (brandsObj[brand.id] = brand.name);
   });
 
+  const deviceArr = device.devices.slice();
+
+  
+
   return (
     <Row className="d-flex">
-      {device.devices.map((device) => (
-        <DeviceItem key={device.id} device={device} brands={brandsObj} />
-      ))}
+      {deviceArr
+        
+        .map((device) => (
+          <DeviceItem key={device.id} device={device} brands={brandsObj} />
+        ))}
     </Row>
   );
-
 });
 
 export default DeviceList;

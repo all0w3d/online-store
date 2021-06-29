@@ -8,6 +8,7 @@ import { check } from "./http/userAPI";
 import { Spinner } from "react-bootstrap";
 import { fetchBaskets, fetchBasketsDevices } from "./http/basketApi";
 import { fetchBrands, fetchOneDevice } from "./http/deviceAPI";
+import './styles/main.scss'
 
 const App = observer(() => {
   const { user, basket } = useContext(Context);
@@ -53,7 +54,11 @@ const App = observer(() => {
   }, []);
 
   if (user.isLoading) {
-    return <Spinner animation={"grow"} />;
+    return (
+      <div style={{width: '100%', height: '100vh', display: 'flex'}}>
+        <Spinner style={{margin: 'auto'}} animation={"border"} variant="primary" />
+      </div>
+    );
   }
 
   return (

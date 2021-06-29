@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
-import star from "../assets/star.png";
 import { useHistory } from "react-router-dom";
 import { DEVICE_ROUTE } from "../utils/consts";
+import Rating from "react-rating";
+import star from "../assets/star.png";
+import starActive from "../assets/staractive.png";
+import { findRating } from "../http/ratingApi";
 
 const DeviceItem = ({ device, brands }) => {
+  const [recievedRating, SetRecivedRating] = useState();
+
   const history = useHistory();
+  useEffect(() => {
+    findRating(device.id).then((data) => {
+      let rateArr = [];
+      data.forEach((i) => {
+        rateArr.push(i.rate);
+      });
+      const averageRate = (
+        rateArr.reduce((sume, el) => sume + el, 0) / rateArr.length
+      ).toFixed(1);
+
+      SetRecivedRating(averageRate);
+    });
+  }, []);
 
   return (
     <Col
@@ -15,12 +33,12 @@ const DeviceItem = ({ device, brands }) => {
       onClick={() => history.push(DEVICE_ROUTE + "/" + device.id)}
     >
       <Card
+        className="deviceitem"
         style={{
           boxSizing: "border-box",
-          width: "150px",
-
+          
           cursor: "pointer",
-          padding: "10px",
+          padding: "20px",
         }}
         border="1px"
       >
@@ -40,8 +58,20 @@ const DeviceItem = ({ device, brands }) => {
           <div>{brands[device.brandId]}</div>
 
           <div className="d-flex align-items-center">
-            <div>{device.rating}</div>
-            <Image width={18} height={18} src={star} />
+            <div style={{ marginTop: "5px", marginRight: "3px" }}>
+              {isNaN(recievedRating) ? 0 : recievedRating}
+            </div>
+            <Rating
+              emptySymbol={
+                <img src={star} className="icon mr-1" width="20px" alt="" />
+              }
+              fullSymbol={
+                <img src={starActive} className="icon" width="20px" alt="" />
+              }
+              readonly
+              stop={1}
+              initialRating={recievedRating}
+            />
           </div>
         </div>
         <div>{device.name}</div>

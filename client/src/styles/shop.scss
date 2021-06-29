@@ -1,0 +1,82 @@
+.brandbar {
+  border: 0;
+  padding: 5px 10px;
+}
+.list-group-item {
+  //   border-radius: 10px !important;
+  background-color: $bc;
+  transition: all 0.1s ease-in-out;
+  &:hover {
+    background-color: $blue;
+    color: white;
+  }
+}
+.typebar {
+  border: 0;
+  width: 200px;
+}
+
+.pagination {
+  margin-right: 5px;
+
+  a,
+  span {
+    border-radius: 20px !important;
+    width: 40px;
+    text-align: center;
+    border-color: transparent;
+  }
+}
+
+.navbar {
+  background-color: $blue;
+  button {
+    border: 0;
+
+    &:hover {
+      background-color: #c3e0ff;
+      color: black;
+    }
+    .badge {
+      color: white;
+    }
+  }
+}
+
+.deviceitem {
+  border: 0;
+  box-shadow: 2px 2px 10px #d6d6d6;
+  transition: 0.2s ease-in-out;
+  width: 200px;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 2px 2px 10px #88a7cfb2;
+  }
+}
+
+@media (max-width: 767px) {
+  .brand {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .typebar {
+    align-self: center;
+    height: 40px;
+    margin: 0;
+    padding: 5px;
+    width: 80%;
+  }
+
+  .type {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .deviceitem {
+    margin: auto;
+    width: 300px;
+  }
+}

@@ -15,6 +15,7 @@ import Container from "react-bootstrap/Container";
 import { useHistory } from "react-router-dom";
 import { exit } from "../http/userAPI";
 import logo from "../assets/logo.png";
+
 const NavBar = observer(() => {
   const { user, basket } = useContext(Context);
   const history = useHistory();
@@ -27,9 +28,9 @@ const NavBar = observer(() => {
   };
 
   return (
-    <Navbar bg="dark" variant="dark">
-      <Container>
-        <NavLink style={{ color: "white", cursor: "pointer" }} to={SHOP_ROUTE}>
+    <Navbar className="navbar">
+      <Container  className='navlinks'>
+        <NavLink className='logo' style={{ color: "white", cursor: "pointer" }} to={SHOP_ROUTE}>
           <Image
             src={logo}
             style={{ height: "40px", margin: "0 15px 0 0" }}
@@ -63,7 +64,7 @@ const NavBar = observer(() => {
                 className="ml-2"
               >
                 Корзина{" "}
-                <span className="badge bg-primary">
+                <span className="badge bg-danger">
                   {basket.devices.length ? basket.devices.length : null}
                 </span>
                 <span className="visually-hidden"></span>

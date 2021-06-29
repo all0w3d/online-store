@@ -1,15 +1,16 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
-import { Container, Row } from "react-bootstrap";
+import { Container, Row, Button } from "react-bootstrap";
 import { clearBasket } from "../http/basketApi";
-import { fetchBrands, fetchTypes } from "../http/deviceAPI";
 import { Context } from "../index";
+import { NavLink } from "react-router-dom";
+import { SHOP_ROUTE } from "../utils/consts";
 
 const Basket = observer(() => {
   const { basket } = useContext(Context);
 
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 p-5">
       <Row>Ваши товары:</Row>
       {basket.devices.length !== 0 ? (
         basket.devices.map((dev) => {
@@ -41,9 +42,10 @@ const Basket = observer(() => {
           {basket.price} грн.
         </span>
       </Row>
+      <Row>
       <button
         type="button"
-        className="btn btn-primary mt-5"
+        className="btn btn-primary mt-5 m-1"
         onClick={() => {
           clearBasket()
           basket.clearBasket()
@@ -51,9 +53,19 @@ const Basket = observer(() => {
       >
         Очистить корзину
       </button>
-      <button type="button" className="btn btn-success mt-5 ml-3">
+      <button type="button" className="btn btn-success mt-5 m-1">
         Офрмить заказ
       </button>
+      <NavLink to={SHOP_ROUTE} className=' mt-5 m-1'>
+        <Button
+          variant={"warning"}
+        >
+          На главную
+        </Button>
+      </NavLink>
+      </Row>
+
+      
     </Container>
   );
 });

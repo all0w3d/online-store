@@ -1,18 +1,30 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Button, Card, Col, Container, Image, Row } from "react-bootstrap";
-import bigStar from "../assets/bigStar.png";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Image,
+  Row,
+  Spinner,
+} from "react-bootstrap";
+
+import star from "../assets/star.png";
+import starActive from "../assets/staractive.png";
 import { Link, NavLink, useParams } from "react-router-dom";
 import { fetchOneDevice, fetchBrands } from "../http/deviceAPI";
 import { Context } from "../index";
 import { SHOP_ROUTE, LOGIN_ROUTE } from "../utils/consts";
 import { addDeviceToBasket } from "../http/basketApi";
-import '@fortawesome/react-fontawesome'
-
-
+import Rating from "react-rating";
+import { addRating, findRating, removeRating } from "../http/ratingApi";
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
   const [brand, setBrand] = useState();
+  const [rating, setRating] = useState();
+  const [rated, setRated] = useState(false);
+  const [recievedRating, setRecievedRating] = useState();
   const { id } = useParams();
   const { user, basket } = useContext(Context);
 
@@ -29,6 +41,23 @@ const DevicePage = () => {
     });
   }, []);
 
+  useEffect(() => {
+    findRating(device.id).then((data) => {
+      let rateArr = [];
+      data.forEach((i) => {
+        rateArr.push(i.rate);
+        if (i.userId === user.userId) {
+          setRated(true);
+        }
+      });
+      const averageRate = (
+        rateArr.reduce((sume, el) => sume + el, 0) / rateArr.length
+      ).toFixed(1);
+
+      setRecievedRating(averageRate);
+    });
+  }, [device]);
+
   return (
     <Container className="mt-3">
       <NavLink to={SHOP_ROUTE}>
@@ -39,30 +68,70 @@ const DevicePage = () => {
 
       <Row>
         <Col md={4} style={{ display: "flex", alignItems: "center" }}>
-          <Image
-            src={process.env.REACT_APP_API_URL + device.img}
-            style={{ maxWidth: "300px" }}
-          />
+          {device.img ? (
+            <Image
+              src={process.env.REACT_APP_API_URL + device.img}
+              style={{ maxWidth: "300px" }}
+            />
+          ) : (
+            <Spinner
+              style={{ margin: "auto" }}
+              animation={"border"}
+              variant="primary"
+            />
+          )}
         </Col>
+
         <Col md={4}>
           <Row className="d-flex flex-column align-items-center">
             <h2>
               {brand} {device.name}
             </h2>
-            <div
-              className="d-flex align-items-center justify-content-center"
-              style={{
-                background: `url(${bigStar}) no-repeat center center`,
-                width: 240,
-                height: 240,
-                backgroundSize: "cover",
-                fontSize: 64,
-              }}
-            >
-              {device.rating}
-            </div>
 
-           
+            <div className="d-flex flex-column align-items-center justify-content-center m-3">
+              <Rating
+                onChange={(e) => {
+                  setRating(e);
+                }}
+                className="mt-5 mb-4"
+                emptySymbol={
+                  <img src={star} className="icon mr-1" width="40px" alt="" />
+                }
+                fullSymbol={
+                  <img src={starActive} className="icon" width="40px" alt="" />
+                }
+                initialRating={rating || recievedRating}
+                readonly={rated || !user.isAuth}
+              />
+
+              {user.isAuth ? (
+                rated ? (
+                  <Button
+                    onClick={() => {
+                      setRated(false);
+                      removeRating(user.userId, device.id);
+                    }}
+                  >
+                    Переголосовать
+                  </Button>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      if (rating) {
+                        addRating(rating, user.userId, device.id);
+                        setRated(true);
+                      } else {
+                        alert("Ошибка, укажите рейтинг");
+                      }
+                    }}
+                  >
+                    Оценить
+                  </Button>
+                )
+              ) : (
+                <div>Авторизируйтесь чтобы оценить</div>
+              )}
+            </div>
           </Row>
         </Col>
         <Col md={4}>
